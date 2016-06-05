@@ -8,8 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class AvisosActivity extends AppCompatActivity {
+
+    private ListView mListView;
+    private String[] listaDeAvisos = new String[]{"first record","second record", "third record"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,22 @@ public class AvisosActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        mListView = (ListView) findViewById(R.id.avisos_list_view);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+
+                //Context
+                this,
+                //Layout
+                R.layout.avisos_row,
+                //row (view)
+                R.id.row_text,
+                //data (model)
+                listaDeAvisos
+        );
+
+        mListView.setAdapter(arrayAdapter);
     }
 
     @Override
