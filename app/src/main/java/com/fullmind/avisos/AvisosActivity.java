@@ -1,5 +1,6 @@
 package com.fullmind.avisos;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,7 +16,10 @@ import android.widget.ListView;
 public class AvisosActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private String[] listaDeAvisos = new String[]{"first record","second record", "third record"};
+
+    private AvisosDBAdapter mDbAdapter;
+    private AvisosSimpleCursorAdapter mCursorAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,22 +28,48 @@ public class AvisosActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mListView = ( ListView ) findViewById( R.id.avisos_list_view );
+        findViewById( R.id.avisos_list_view );
+        mListView.setDivider( null );
+        mDbAdapter = new AvisosDBAdapter( this );
+        mDbAdapter.open();
+
+        if ( savedInstanceState == null ) {
+            mDbAdapter.deleteAllReminders();
+
+            mDbAdapter.createReminder("Primer reminder, aviso creado", true);
+            mDbAdapter.createReminder("Segundo reminder, aviso nuevo", false);
+        }
+
+        Cursor cursor = mDbAdapter.fetchAllReminders();
+
+        String[] from = new String[]{
+          AvisosDBAdapter.COL_CONTENT
+        };
+
+        int[] to = new  int[]{
+                R.id.row_text
+        };
+
+        mCursorAdapter = new AvisosSimpleCursorAdapter(
+                //context
+                AvisosActivity.this,
+                //el layout de la fila
+                R.layout.avisos_row,
+                //cursor
+                cursor,
+                //desde columnas definidas en la BDD
+                from,
+                //a las ids de views en el layout
+                to,
+                //flagg - no usado
+                0
+        );
 
         mListView = (ListView) findViewById(R.id.avisos_list_view);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 
-                //Context
-                this,
-                //Layout
-                R.layout.avisos_row,
-                //row (view)
-                R.id.row_text,
-                //data (model)
-                listaDeAvisos
-        );
-
-        mListView.setAdapter(arrayAdapter);
+        mListView.setAdapter(mCursorAdapter);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
