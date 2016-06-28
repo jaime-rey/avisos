@@ -4,4 +4,5 @@
     <string name="aviso_text">Aviso Text</string>
     <string name="new_item">Nuevo Aviso</string>
     <string name="aviso_exit">Salir</string>
+    <string name="delete">delete</string>
 </resources>
