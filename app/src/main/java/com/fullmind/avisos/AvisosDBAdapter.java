@@ -90,8 +90,8 @@ public class AvisosDBAdapter {
 
         return new Aviso(
                 cursor.getInt( INDEX_ID ),
-                cursor.getInt( INDEX_IMPORTANT ),
-                cursor.getString( INDEX_CONTENT )
+                cursor.getString( INDEX_CONTENT ),
+                cursor.getInt( INDEX_IMPORTANT )
         );
     }
 
